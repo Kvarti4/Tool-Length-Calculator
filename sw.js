@@ -1,1 +1,10 @@
-const CACHE="minus-app-v3"; const FILES=["./","./index.html","./style.css","./app.js","./manifest.json","./icon-180.png","./icon-512.png"]; self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)));self.skipWaiting()}); self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()}); self.addEventListener("fetch",e=>{if(e.request.method==="GET")e.respondWith(caches.match(e.request).then(c=>c||fetch(e.request)))});
+// This app intentionally does not cache files. Remove any old cache from earlier versions.
+self.addEventListener("install", event => self.skipWaiting());
+self.addEventListener("activate", event => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(key => caches.delete(key)));
+    await self.registration.unregister();
+    await self.clients.claim();
+  })());
+});
