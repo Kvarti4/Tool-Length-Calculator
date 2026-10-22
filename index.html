@@ -16,13 +16,9 @@
 <body>
   <main class="app">
     <header class="topbar">
-      <div>
-        <p class="eyebrow">SNABBRÄKNARE</p>
-        <h1>Minus</h1>
-      </div>
+      <div><p class="eyebrow">SNABBRÄKNARE</p><h1>Minus</h1></div>
       <button id="settingsButton" class="icon-button" aria-label="Inställningar" title="Inställningar">⚙</button>
     </header>
-
     <section class="display-card" aria-live="polite">
       <p class="label">FÖRINSTÄLLT TAL</p>
       <div class="preset-line"><span id="presetDisplay">484</span><span class="minus">−</span></div>
@@ -34,22 +30,21 @@
       <button id="copyButton" class="copy-button" disabled>▢ &nbsp; Kopiera resultat</button>
       <p id="copyStatus" class="copy-status" role="status"></p>
     </section>
-
     <section class="keypad" aria-label="Sifferknappar">
       <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button>
       <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button>
       <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button>
-      <button data-key="clear" class="utility">Rensa</button><button data-key="0">0</button><button data-key="backspace" class="utility" aria-label="Radera senaste siffran">⌫</button>
+      <button data-key="clear" class="utility">Rensa</button><button data-key="0">0</button><button data-key="backspace" class="utility" aria-label="Radera senaste tecknet">⌫</button>
+      <button data-key="decimal" class="decimal-key">,</button>
     </section>
-    <p class="footnote">Skriv talet som ska dras från standardtalet.</p>
+    <p class="footnote">Skriv talet som ska dras från standardtalet. Använd komma för decimaler.</p>
   </main>
-
   <dialog id="settingsDialog">
     <form method="dialog" id="settingsForm">
       <div class="dialog-header"><h2>Inställningar</h2><button class="close-button" aria-label="Stäng">×</button></div>
       <label for="presetInput">Förinställt tal</label>
-      <input id="presetInput" type="number" inputmode="numeric" step="1" value="484" required>
-      <p class="hint">Exempel: 484 − 384 = 100. Talet sparas på den här enheten.</p>
+      <input id="presetInput" type="text" inputmode="decimal" value="484" required>
+      <p class="hint">Du kan även använda decimaler, till exempel 484,5.</p>
       <div class="dialog-actions">
         <button type="button" id="resetButton" class="secondary">Återställ till 484</button>
         <button type="submit" class="save-button">Spara</button>
