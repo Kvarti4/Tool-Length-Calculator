@@ -1,9 +1,9 @@
-MINUS – EN RAD
+NY VERSION – ÄNDRINGSBART FÖRINSTÄLLT TAL
 
-index.html innehåller hela appen. Displayen visar på en rad:
-484 − [talet du skriver] = [svaret]
-Exempel: 484 − 100 = 384.
+Det finns nu en kugghjulsknapp uppe till höger. Tryck på den för att ändra förinställt tal.
+Du kan även trycka på minustecknet (−) i knappfältet för att öppna inställningen.
+Skriv exempelvis 500 eller 484,5 och tryck Spara. Inställningen sparas på enheten.
+Displayen visar på samma rad: 484 − 100 = 384.
 
-Ladda upp filerna direkt i roten av GitHub-repot och ersätt befintliga filer.
-Commit changes. Vänta tills GitHub Pages publicerat ändringarna.
-Öppna Safari på iPhone och uppdatera sidan.
+Ladda upp/ersätt filerna direkt i roten av GitHub-repot, committa och vänta på GitHub Pages.
+På iPhone: öppna sidan i Safari och uppdatera den.

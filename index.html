@@ -16,81 +16,95 @@
 html,body{margin:0;width:100%;height:100%;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
 body{min-height:100svh;overflow:hidden}
 .app{height:100svh;width:100%;max-width:560px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 14px max(16px,env(safe-area-inset-bottom));display:flex;flex-direction:column}
+.topbar{display:flex;justify-content:flex-end;flex:0 0 auto;height:42px}
+.settings{width:42px;height:42px;aspect-ratio:auto;border-radius:50%;background:#202020;color:#aaa;font-size:23px;border:1px solid #393939}
 .display{flex:1 1 auto;min-height:0;display:flex;align-items:flex-end;padding:0 2px 22px;overflow:hidden}
 .equation{display:flex;align-items:baseline;justify-content:flex-end;gap:clamp(4px,1.5vw,10px);width:100%;white-space:nowrap;overflow:hidden}
 .preset,.entered,.equals{font-size:clamp(22px,6.2vw,42px);font-weight:300;line-height:1;letter-spacing:-1px;flex:0 0 auto}
-.preset{color:var(--orange)}
-.entered{color:#fff;min-width:0}
-.equals{color:#888}
+.preset{color:var(--orange)}.entered{color:#fff;min-width:0}.equals{color:#888}
 .result{font-size:clamp(28px,8vw,54px);font-weight:300;letter-spacing:-1.5px;line-height:1;flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:clip;color:#fff}
 .keys{flex:0 0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding-bottom:4px}
 button{border:0;color:#fff;border-radius:50%;aspect-ratio:1/1;width:100%;font:300 clamp(25px,7.3vw,38px)/1 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;user-select:none;touch-action:manipulation}
-button:active{filter:brightness(1.25)}
-.num{background:var(--dark)}.fn{background:var(--fn)}.op{background:var(--orange);font-size:clamp(32px,8vw,42px)}
+button:active{filter:brightness(1.25)}.num{background:var(--dark)}.fn{background:var(--fn)}.op{background:var(--orange);font-size:clamp(32px,8vw,42px)}
+.modal-backdrop{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:24px;z-index:10}
+.modal-backdrop.open{display:flex}
+.modal{width:min(100%,360px);background:#252525;border:1px solid #444;border-radius:22px;padding:22px}
+.modal h2{margin:0 0 18px;font-size:21px;font-weight:500}
+.modal label{display:block;color:#aaa;font-size:14px;margin-bottom:8px}
+.modal input{width:100%;background:#111;color:#fff;border:1px solid #555;border-radius:12px;padding:14px;font-size:24px;outline:none}
+.modal-actions{display:flex;gap:10px;margin-top:18px}
+.modal-actions button{aspect-ratio:auto;width:50%;border-radius:14px;padding:13px;font-size:16px;font-weight:500}
+.cancel{background:#444}.save{background:var(--orange)}
 @media(max-height:700px){.app{padding-top:max(8px,env(safe-area-inset-top));padding-bottom:max(8px,env(safe-area-inset-bottom))}.display{padding-bottom:12px}.keys{gap:7px}}
 </style>
 </head>
 <body>
 <main class="app" aria-label="Minus-kalkylator">
-<section class="display" aria-live="polite">
-  <div class="equation">
-    <span class="preset" id="presetDisplay">484 −</span>
-    <span class="entered" id="enteredDisplay"></span>
-    <span class="equals">=</span>
-    <span class="result" id="resultDisplay">—</span>
-  </div>
-</section>
-<section class="keys" aria-label="Knappar">
-<button class="fn" data-action="backspace" aria-label="Radera senaste">⌫</button>
-<button class="fn" data-action="clear">AC</button>
-<button class="fn" data-action="percent">%</button>
-<button class="op" data-action="divide">÷</button>
-<button class="num" data-digit="7">7</button><button class="num" data-digit="8">8</button><button class="num" data-digit="9">9</button><button class="op" data-action="multiply">×</button>
-<button class="num" data-digit="4">4</button><button class="num" data-digit="5">5</button><button class="num" data-digit="6">6</button><button class="op" data-action="subtract">−</button>
-<button class="num" data-digit="1">1</button><button class="num" data-digit="2">2</button><button class="num" data-digit="3">3</button><button class="op" data-action="add">+</button>
-<button class="fn" data-action="sign">+/−</button><button class="num" data-digit="0">0</button><button class="num" data-action="decimal">,</button><button class="op" data-action="equals">=</button>
-</section>
+  <div class="topbar"><button class="settings" id="settingsButton" aria-label="Ändra förinställt tal">⚙</button></div>
+  <section class="display" aria-live="polite">
+    <div class="equation">
+      <span class="preset" id="presetDisplay">484 −</span>
+      <span class="entered" id="enteredDisplay"></span>
+      <span class="equals">=</span>
+      <span class="result" id="resultDisplay">—</span>
+    </div>
+  </section>
+  <section class="keys" aria-label="Knappar">
+    <button class="fn" data-action="backspace" aria-label="Radera senaste">⌫</button>
+    <button class="fn" data-action="clear">AC</button>
+    <button class="fn" data-action="percent">%</button>
+    <button class="op" data-action="divide">÷</button>
+    <button class="num" data-digit="7">7</button><button class="num" data-digit="8">8</button><button class="num" data-digit="9">9</button><button class="op" data-action="multiply">×</button>
+    <button class="num" data-digit="4">4</button><button class="num" data-digit="5">5</button><button class="num" data-digit="6">6</button><button class="op" data-action="subtract">−</button>
+    <button class="num" data-digit="1">1</button><button class="num" data-digit="2">2</button><button class="num" data-digit="3">3</button><button class="op" data-action="add">+</button>
+    <button class="fn" data-action="sign">+/−</button><button class="num" data-digit="0">0</button><button class="num" data-action="decimal">,</button><button class="op" data-action="equals">=</button>
+  </section>
 </main>
+<div class="modal-backdrop" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="modal">
+    <h2 id="settingsTitle">Förinställt tal</h2>
+    <label for="presetInput">Ange tal (komma eller punkt går bra)</label>
+    <input id="presetInput" inputmode="decimal" autocomplete="off" value="484">
+    <div class="modal-actions"><button class="cancel" id="cancelSettings">Avbryt</button><button class="save" id="saveSettings">Spara</button></div>
+  </div>
+</div>
 <script>
 (() => {
  let preset=484, input="";
  const presetEl=document.getElementById("presetDisplay"), enteredEl=document.getElementById("enteredDisplay"), resultEl=document.getElementById("resultDisplay");
+ const modal=document.getElementById("settingsModal"), presetInput=document.getElementById("presetInput");
  const fmt=n=>{if(!Number.isFinite(n))return "—";let r=Math.round((n+Number.EPSILON)*1e8)/1e8;return String(r).replace(".",",")};
  const parse=s=>(!s||s==="-"||s===","||s==="-,")?NaN:Number(s.replace(",","."));
  function render(){
-   presetEl.textContent=fmt(preset)+" −";
-   enteredEl.textContent=input;
-   const v=parse(input);
-   resultEl.textContent=Number.isFinite(v)?fmt(preset-v):"—";
-   // Fit the full expression into the display on narrow phones.
-   const eq=document.querySelector(".equation");
-   const spans=[presetEl,enteredEl,document.querySelector(".equals"),resultEl];
+   presetEl.textContent=fmt(preset)+" −"; enteredEl.textContent=input;
+   const v=parse(input); resultEl.textContent=Number.isFinite(v)?fmt(preset-v):"—";
+   const eq=document.querySelector(".equation"), spans=[presetEl,enteredEl,document.querySelector(".equals"),resultEl];
    spans.forEach(el=>el.style.fontSize="");
-   const available=eq.clientWidth;
-   let size=Math.min(window.innerWidth*0.062,42);
-   if(window.innerWidth<390) size=Math.max(18,window.innerWidth*0.052);
+   let size=window.innerWidth<390?Math.max(18,window.innerWidth*.052):Math.min(window.innerWidth*.062,42);
    spans.forEach(el=>el.style.fontSize=size+"px");
-   let total=spans.reduce((sum,el)=>sum+el.scrollWidth,0)+parseFloat(getComputedStyle(eq).gap)*3;
-   if(total>available){
-     const scale=Math.max(0.45,available/total);
-     spans.forEach(el=>el.style.fontSize=(size*scale)+"px");
-   }
+   const gap=parseFloat(getComputedStyle(eq).gap)||4;
+   let total=spans.reduce((sum,el)=>sum+el.scrollWidth,0)+gap*3, available=eq.clientWidth;
+   if(total>available){let scale=Math.max(.35,available/total);spans.forEach(el=>el.style.fontSize=(size*scale)+"px")}
  }
+ function openSettings(){presetInput.value=String(preset).replace(".",",");modal.classList.add("open");setTimeout(()=>{presetInput.focus();presetInput.select()},100)}
+ function closeSettings(){modal.classList.remove("open")}
+ function saveSettings(){const s=presetInput.value.trim(),v=Number(s.replace(",","."));if(s!==""&&Number.isFinite(v)){preset=v;try{localStorage.setItem("minus-preset-editable-v1",String(preset))}catch(e){}render();closeSettings()}else{presetInput.focus();presetInput.select()}}
  function digit(d){if(input==="0")input=d;else if(input==="-0")input="-"+d;else input+=d;render()}
- function clear(){input="";render()}
- function backspace(){input=input.slice(0,-1);render()}
+ function clear(){input="";render()} function backspace(){input=input.slice(0,-1);render()}
  function decimal(){if(!input)input="0,";else if(!input.includes(","))input+=",";render()}
  function sign(){if(!input)input="-";else if(input.startsWith("-"))input=input.slice(1);else input="-"+input;render()}
  function percent(){let v=parse(input);if(Number.isFinite(v))input=String(v/100).replace(".",",");render()}
- function setPreset(){let s=prompt("Förinställt tal:",String(preset).replace(".",","));if(s===null)return;let v=Number(s.trim().replace(",","."));if(s.trim()!==""&&Number.isFinite(v)){preset=v;try{localStorage.setItem("minus-preset-v3",String(preset))}catch(e){}render()}}
+ document.getElementById("settingsButton").addEventListener("click",openSettings);
+ document.getElementById("cancelSettings").addEventListener("click",closeSettings);
+ document.getElementById("saveSettings").addEventListener("click",saveSettings);
+ presetInput.addEventListener("keydown",e=>{if(e.key==="Enter")saveSettings();if(e.key==="Escape")closeSettings()});
+ modal.addEventListener("click",e=>{if(e.target===modal)closeSettings()});
  document.querySelector(".keys").addEventListener("click",e=>{
    let b=e.target.closest("button");if(!b)return;
    if(b.dataset.digit!==undefined){digit(b.dataset.digit);return}
-   switch(b.dataset.action){
-     case "clear":clear();break;case "backspace":backspace();break;case "decimal":decimal();break;case "sign":sign();break;case "percent":percent();break;case "equals":render();break;case "subtract":setPreset();break;
-   }
+   switch(b.dataset.action){case "clear":clear();break;case "backspace":backspace();break;case "decimal":decimal();break;case "sign":sign();break;case "percent":percent();break;case "equals":render();break;case "subtract":openSettings();break}
  });
- try{let s=localStorage.getItem("minus-preset-v3");if(s!==null&&Number.isFinite(Number(s)))preset=Number(s)}catch(e){}
+ try{let s=localStorage.getItem("minus-preset-editable-v1");if(s!==null&&Number.isFinite(Number(s)))preset=Number(s)}catch(e){}
  if("serviceWorker" in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{})}
  window.addEventListener("resize",render);render();
 })();
